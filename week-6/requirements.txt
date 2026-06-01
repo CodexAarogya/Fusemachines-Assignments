@@ -1,0 +1,10 @@
+pymc 
+arviz
+pgmpy
+scikit-learn
+scipy
+statsmodels
+pandas
+numpy
+matplotlib
+seaborn
