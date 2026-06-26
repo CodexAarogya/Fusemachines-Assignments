@@ -4,4 +4,8 @@ matplotlib
 scikit-learn
 seaborn
 yfinance
-statsmodels
+statsmodels  
+prophet 
+lightgbm 
+xgboost 
+tensorflow 
