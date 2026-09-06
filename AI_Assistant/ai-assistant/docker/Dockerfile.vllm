@@ -1,0 +1,23 @@
+# ---- Local open-source model server (vLLM) ----
+# vLLM requires an NVIDIA GPU + CUDA runtime. We build on their official
+# image rather than installing vllm on top of python:slim, since vLLM's
+# own image already ships the matched CUDA/torch/vllm versions.
+#
+# This image exposes an OpenAI-compatible API on :8000, which is why
+# app/llm/providers.py can talk to it with the same AsyncOpenAI client
+# used for the OpenAI cloud provider (see LOCAL_LLM_BASE_URL in .env).
+FROM vllm/vllm-openai:latest
+
+# Override at `docker run`/compose time to pick a different open model,
+# e.g. mistralai/Mistral-7B-Instruct-v0.3
+ENV MODEL_NAME="meta-llama/Meta-Llama-3-8B-Instruct"
+
+EXPOSE 8000
+
+ENTRYPOINT ["python3", "-m", "vllm.entrypoints.openai.api_server"]
+CMD ["--model", "meta-llama/Meta-Llama-3-8B-Instruct", "--host", "0.0.0.0", "--port", "8000", "--dtype", "auto"]
+
+# Run standalone (no GPU compose profile) with:
+#   docker run --gpus all -p 8000:8000 \
+#     -e HUGGING_FACE_HUB_TOKEN=<token> \
+#     ai-assistant-vllm --model meta-llama/Meta-Llama-3-8B-Instruct

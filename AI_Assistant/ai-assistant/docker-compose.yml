@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-assistant-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - chroma_data:/data/chroma
+      - ./data:/app/data
+    depends_on:
+      vllm:
+        condition: service_started
+        required: false
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+
+  ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.ui
+    container_name: ai-assistant-ui
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  # Local open-source model server. Requires an NVIDIA GPU + nvidia-container-toolkit.
+  # Start with: docker compose --profile local-llm up
+  # If you don't have a GPU, leave this profile disabled and set
+  # PROVIDER_FALLBACK_ORDER=openai,anthropic in .env instead.
+  vllm:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.vllm
+    container_name: ai-assistant-vllm
+    profiles: ["local-llm"]
+    ports:
+      - "8001:8000"
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN}
+    command: >
+      --model meta-llama/Meta-Llama-3-8B-Instruct
+      --host 0.0.0.0
+      --port 8000
+      --dtype auto
+      --gpu-memory-utilization 0.9
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
