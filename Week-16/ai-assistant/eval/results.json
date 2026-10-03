@@ -1,0 +1,491 @@
+[
+  {
+    "id": "happy_path_cross_source",
+    "query": "What technique does vLLM use to improve throughput, and is that confirmed by an external source?",
+    "description": "Two independent, agreeing sources -> should finish with a confident answer.",
+    "expected_outcome": "finished",
+    "actual_stop_reason": "finished",
+    "task_completed": true,
+    "iterations_used": 3,
+    "confidence": 0.9,
+    "sources_used": [
+      "rag_search",
+      "wikipedia_search"
+    ],
+    "final_answer": "vLLM improves throughput using PagedAttention, an efficient KV-cache management technique. This is confirmed both by the internal course notes and by an external Wikipedia summary.",
+    "clarification_question": null,
+    "total_tokens": 1598,
+    "baseline_tokens_estimate": 109,
+    "token_overhead_x": 14.66,
+    "tool_calls_correct": 2,
+    "tool_calls_total": 2,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "Check the internal knowledge base first.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "vLLM throughput technique"
+        },
+        "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+        "tokens_used": 472
+      },
+      {
+        "iteration": 2,
+        "thought": "Cross-check against an independent external source before trusting one source alone.",
+        "action": "wikipedia_search",
+        "action_input": {
+          "query": "vllm"
+        },
+        "observation": "vLLM: vLLM is a fast inference and serving engine for large language models, known for PagedAttention which improves memory efficiency and throughput.",
+        "tokens_used": 524
+      },
+      {
+        "iteration": 3,
+        "thought": "Both sources agree on PagedAttention; confidence is now high.",
+        "action": "finish",
+        "action_input": {},
+        "observation": "Accepted: sufficient independent sources and confidence.",
+        "tokens_used": 602
+      }
+    ]
+  },
+  {
+    "id": "calculator_tool_use",
+    "query": "If I ingest 3 documents averaging 40 chunks each, how many total chunks is that, and does the internal KB design support that scale?",
+    "description": "Requires the calculator tool with correctly-typed arguments, plus one more source before finishing.",
+    "expected_outcome": "finished",
+    "actual_stop_reason": "finished",
+    "task_completed": true,
+    "iterations_used": 3,
+    "confidence": 0.75,
+    "sources_used": [
+      "calculator",
+      "rag_search"
+    ],
+    "final_answer": "That's 120 total chunks. The internal notes describe Chroma as suitable for this kind of small-to-medium scale.",
+    "clarification_question": null,
+    "total_tokens": 1529,
+    "baseline_tokens_estimate": 118,
+    "token_overhead_x": 12.96,
+    "tool_calls_correct": 2,
+    "tool_calls_total": 2,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "First compute the arithmetic part.",
+        "action": "calculator",
+        "action_input": {
+          "expression": "3 * 40"
+        },
+        "observation": "3 * 40 = 120",
+        "tokens_used": 476
+      },
+      {
+        "iteration": 2,
+        "thought": "Now check whether the internal docs say anything about scale.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "vector database scale chunks"
+        },
+        "observation": "(score=0.88) RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.",
+        "tokens_used": 492
+      },
+      {
+        "iteration": 3,
+        "thought": "I have the arithmetic result and supporting context from two sources (calculator + KB).",
+        "action": "finish",
+        "action_input": {},
+        "observation": "Accepted: sufficient independent sources and confidence.",
+        "tokens_used": 561
+      }
+    ]
+  },
+  {
+    "id": "ambiguous_needs_clarification",
+    "query": "Compare the two options and tell me which is better.",
+    "description": "Query is underspecified (no options named) -> agent should recognize this and ask, not guess.",
+    "expected_outcome": "ask_clarification",
+    "actual_stop_reason": "ask_clarification",
+    "task_completed": true,
+    "iterations_used": 1,
+    "confidence": 0.0,
+    "sources_used": [],
+    "final_answer": null,
+    "clarification_question": "Could you tell me which two options you'd like me to compare?",
+    "total_tokens": 489,
+    "baseline_tokens_estimate": 98,
+    "token_overhead_x": 4.99,
+    "tool_calls_correct": 0,
+    "tool_calls_total": 0,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "The query references 'the two options' but none were specified anywhere in the conversation. Guessing would be unreliable.",
+        "action": "ask_clarification",
+        "action_input": {},
+        "observation": "Stopping to ask the user.",
+        "tokens_used": 489
+      }
+    ]
+  },
+  {
+    "id": "conflicting_evidence_lowers_confidence",
+    "query": "Does vLLM require a GPU, and is that confirmed externally?",
+    "description": "Internal notes and external source give partially conflicting detail -> agent should not finish prematurely; self-check gate rejects low-confidence finish and forces another round.",
+    "expected_outcome": "finished",
+    "actual_stop_reason": "finished",
+    "task_completed": true,
+    "iterations_used": 3,
+    "confidence": 0.65,
+    "sources_used": [
+      "rag_search",
+      "wikipedia_search"
+    ],
+    "final_answer": "vLLM is designed for GPU-accelerated serving; the internal notes focus on its throughput technique (PagedAttention) while the external summary confirms it is an LLM inference/serving engine, consistent with a GPU-based design.",
+    "clarification_question": null,
+    "total_tokens": 1646,
+    "baseline_tokens_estimate": 100,
+    "token_overhead_x": 16.46,
+    "tool_calls_correct": 2,
+    "tool_calls_total": 2,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "Check internal notes.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "vLLM GPU requirement"
+        },
+        "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+        "tokens_used": 457
+      },
+      {
+        "iteration": 2,
+        "thought": "Internal notes don't explicitly mention GPU requirement; check external source.",
+        "action": "wikipedia_search",
+        "action_input": {
+          "query": "vllm"
+        },
+        "observation": "vLLM: vLLM is a fast inference and serving engine for large language models, known for PagedAttention which improves memory efficiency and throughput.",
+        "tokens_used": 550
+      },
+      {
+        "iteration": 3,
+        "thought": "Confidence is below my own threshold given the partial mismatch; I should finish now since I have two independent sources and the evidence is reasonably consistent even if not word-for-word identical.",
+        "action": "finish",
+        "action_input": {},
+        "observation": "Accepted: sufficient independent sources and confidence.",
+        "tokens_used": 639
+      }
+    ]
+  },
+  {
+    "id": "failure_injection_wikipedia_down",
+    "query": "What is Retrieval-Augmented Generation, confirmed by an external source?",
+    "description": "FAILURE INJECTION TEST: wikipedia_search is forced to fail, leaving only one of the two required independent sources available. The self-check gate will correctly refuse to let the agent 'finish' on one source pretending to be cross-verified, so the expected (correct) outcome is that the run does NOT end in a confident 'finished' state -- it should end via loop_detected or max_iterations instead, having been blocked from fabricating confirmation.",
+    "expected_outcome": "recognizes_failure",
+    "actual_stop_reason": "loop_detected",
+    "task_completed": true,
+    "iterations_used": 4,
+    "confidence": 0.5,
+    "sources_used": [
+      "rag_search"
+    ],
+    "final_answer": "RAG combines retrieval with generation to reduce hallucination (per internal notes). I was NOT able to independently confirm this externally right now because the external lookup tool failed.",
+    "clarification_question": null,
+    "total_tokens": 2155,
+    "baseline_tokens_estimate": 103,
+    "token_overhead_x": 20.92,
+    "tool_calls_correct": 2,
+    "tool_calls_total": 2,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "Check internal notes first.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "retrieval augmented generation"
+        },
+        "observation": "(score=0.88) RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.",
+        "tokens_used": 464
+      },
+      {
+        "iteration": 2,
+        "thought": "Now cross-check externally.",
+        "action": "wikipedia_search",
+        "action_input": {
+          "query": "retrieval-augmented generation"
+        },
+        "observation": "FAILED: wikipedia_search is unavailable (injected failure)",
+        "tokens_used": 506
+      },
+      {
+        "iteration": 3,
+        "thought": "The external tool failed, so I only have one working source. I should not claim external confirmation I don't have. I'll answer from the internal source alone with reduced confidence rather than pretending it was cross-verified.",
+        "action": "finish",
+        "action_input": {},
+        "observation": "Rejected premature finish: only 1/2 independent sources used, confidence 0.50 below threshold 0.6. Continue gathering evidence.",
+        "tokens_used": 616
+      },
+      {
+        "iteration": 4,
+        "thought": "No more scripted reasoning available; stopping defensively.",
+        "action": "finish",
+        "action_input": {},
+        "observation": "LOOP DETECTED (repeated action) \u2014 stopping.",
+        "tokens_used": 569
+      }
+    ]
+  },
+  {
+    "id": "loop_detection_repeated_action",
+    "query": "What is the airspeed velocity of an unladen swallow, confirmed by two sources?",
+    "description": "Out-of-scope query with nothing in the KB or Wikipedia fixtures. Scripted to repeat the identical action twice, triggering the agent's loop-detection guard.",
+    "expected_outcome": "loop_detected",
+    "actual_stop_reason": "loop_detected",
+    "task_completed": true,
+    "iterations_used": 2,
+    "confidence": 0.1,
+    "sources_used": [
+      "rag_search"
+    ],
+    "final_answer": null,
+    "clarification_question": null,
+    "total_tokens": 974,
+    "baseline_tokens_estimate": 105,
+    "token_overhead_x": 9.28,
+    "tool_calls_correct": 2,
+    "tool_calls_total": 2,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "Search internal KB.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "swallow airspeed"
+        },
+        "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+        "tokens_used": 460
+      },
+      {
+        "iteration": 2,
+        "thought": "Nothing relevant came back; try the exact same search again.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "swallow airspeed"
+        },
+        "observation": "LOOP DETECTED (repeated action) \u2014 stopping.",
+        "tokens_used": 514
+      }
+    ]
+  },
+  {
+    "id": "never_converges_hits_max_iterations",
+    "query": "Give me a fully verified, numerically precise answer with five independent sources.",
+    "description": "Script intentionally never reaches a terminal action within the iteration budget -> should hit max_iterations with a soft-failure (partial draft) outcome.",
+    "expected_outcome": "max_iterations",
+    "actual_stop_reason": "max_iterations",
+    "task_completed": true,
+    "iterations_used": 6,
+    "confidence": 0.05,
+    "sources_used": [
+      "rag_search",
+      "wikipedia_search"
+    ],
+    "final_answer": "Best available partial answer.",
+    "clarification_question": null,
+    "total_tokens": 3425,
+    "baseline_tokens_estimate": 106,
+    "token_overhead_x": 32.31,
+    "tool_calls_correct": 5,
+    "tool_calls_total": 5,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "Gather more.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "verification"
+        },
+        "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+        "tokens_used": 463
+      },
+      {
+        "iteration": 2,
+        "thought": "Still not enough sources.",
+        "action": "wikipedia_search",
+        "action_input": {
+          "query": "mistral ai"
+        },
+        "observation": "Mistral AI: Mistral AI is a French company that develops open-weight large language models.",
+        "tokens_used": 516
+      },
+      {
+        "iteration": 3,
+        "thought": "Need a third source, but none are available; keep trying anyway.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "five sources"
+        },
+        "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+        "tokens_used": 551
+      },
+      {
+        "iteration": 4,
+        "thought": "Try again.",
+        "action": "wikipedia_search",
+        "action_input": {
+          "query": "llama (language model)"
+        },
+        "observation": "Llama (language model): Llama is a family of open-weight large language models released by Meta.",
+        "tokens_used": 596
+      },
+      {
+        "iteration": 5,
+        "thought": "One more attempt.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "numerically precise"
+        },
+        "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+        "tokens_used": 627
+      },
+      {
+        "iteration": 6,
+        "thought": "No more scripted reasoning available; stopping defensively.",
+        "action": "finish",
+        "action_input": {},
+        "observation": "Rejected premature finish: confidence 0.05 below threshold 0.6. Continue gathering evidence.",
+        "tokens_used": 672
+      }
+    ]
+  },
+  {
+    "id": "malformed_model_output_then_recovers",
+    "query": "What does context saturation mean, confirmed by an external source if possible?",
+    "description": "First iteration simulates the model returning invalid (non-schema) JSON -- a soft failure the agent must tolerate and recover from, not crash on.",
+    "expected_outcome": "finished",
+    "actual_stop_reason": "finished",
+    "task_completed": true,
+    "iterations_used": 4,
+    "confidence": 0.7,
+    "sources_used": [
+      "rag_search",
+      "wikipedia_search"
+    ],
+    "final_answer": "Context saturation is when appending full raw tool outputs to the conversation history each iteration makes the prompt grow unboundedly, eventually crowding out the original instructions.",
+    "clarification_question": null,
+    "total_tokens": 2290,
+    "baseline_tokens_estimate": 105,
+    "token_overhead_x": 21.81,
+    "tool_calls_correct": 2,
+    "tool_calls_total": 2,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "(invalid JSON)",
+        "action": "invalid",
+        "action_input": {},
+        "observation": "1 validation error for AgentStep\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Sure! Context saturation is when...', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid",
+        "tokens_used": 432
+      },
+      {
+        "iteration": 2,
+        "thought": "Retry with proper structured output: check internal notes.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "context saturation"
+        },
+        "observation": "(score=0.86) Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.",
+        "tokens_used": 540
+      },
+      {
+        "iteration": 3,
+        "thought": "No Wikipedia fixture exists for this specific term, so this source lookup will come back empty -- note that and proceed with appropriate confidence.",
+        "action": "wikipedia_search",
+        "action_input": {
+          "query": "context engineering"
+        },
+        "observation": "Context engineering: Context engineering refers to techniques for managing what information is kept in a language model's context window, such as summarization, note-taking, and compaction.",
+        "tokens_used": 608
+      },
+      {
+        "iteration": 4,
+        "thought": "Internal source is clear; external lookup came back empty rather than contradicting it, so I'll finish with moderate-high confidence from the one strong source plus a documented second attempt.",
+        "action": "finish",
+        "action_input": {},
+        "observation": "Accepted: sufficient independent sources and confidence.",
+        "tokens_used": 710
+      }
+    ]
+  },
+  {
+    "id": "malformed_tool_arguments",
+    "query": "What's the weather for the trip, and how does that relate to deployment regions in the notes?",
+    "description": "Tool-call-correctness probe: first call to get_weather is scripted WITHOUT the required 'city' argument.",
+    "expected_outcome": "finished",
+    "actual_stop_reason": "finished",
+    "task_completed": true,
+    "iterations_used": 4,
+    "confidence": 0.6,
+    "sources_used": [
+      "get_weather",
+      "rag_search"
+    ],
+    "final_answer": "Paris is currently 18C and partly cloudy; the internal notes don't tie weather to deployment regions directly, so that connection is weak.",
+    "clarification_question": null,
+    "total_tokens": 2012,
+    "baseline_tokens_estimate": 108,
+    "token_overhead_x": 18.63,
+    "tool_calls_correct": 2,
+    "tool_calls_total": 3,
+    "failure_class": "none",
+    "trace": [
+      {
+        "iteration": 1,
+        "thought": "Check the weather.",
+        "action": "get_weather",
+        "action_input": {},
+        "observation": "FAILED: missing required argument 'city'",
+        "tokens_used": 457
+      },
+      {
+        "iteration": 2,
+        "thought": "That failed because I didn't specify a city; retry with one.",
+        "action": "get_weather",
+        "action_input": {
+          "city": "Paris"
+        },
+        "observation": "Paris: 18C, Partly cloudy",
+        "tokens_used": 483
+      },
+      {
+        "iteration": 3,
+        "thought": "Also check internal notes for deployment-region context.",
+        "action": "rag_search",
+        "action_input": {
+          "query": "deployment region"
+        },
+        "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+        "tokens_used": 498
+      },
+      {
+        "iteration": 4,
+        "thought": "I have weather plus internal context from two tool sources.",
+        "action": "finish",
+        "action_input": {},
+        "observation": "Accepted: sufficient independent sources and confidence.",
+        "tokens_used": 574
+      }
+    ]
+  }
+]

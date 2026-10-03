@@ -1,0 +1,20 @@
+# ---- Local open-source model server (vLLM) ----
+# Requires an NVIDIA GPU + CUDA runtime. Built on vLLM's official image
+# since it already ships matched CUDA/torch/vllm versions.
+#
+# Exposes an OpenAI-compatible API on :8000, which is why
+# app/llm/providers.py can talk to it with the same AsyncOpenAI client
+# used for the OpenAI cloud provider (see LOCAL_LLM_BASE_URL in .env).
+FROM vllm/vllm-openai:latest
+
+ENV MODEL_NAME="meta-llama/Meta-Llama-3-8B-Instruct"
+
+EXPOSE 8000
+
+ENTRYPOINT ["python3", "-m", "vllm.entrypoints.openai.api_server"]
+CMD ["--model", "meta-llama/Meta-Llama-3-8B-Instruct", "--host", "0.0.0.0", "--port", "8000", "--dtype", "auto"]
+
+# Run standalone (no GPU compose profile) with:
+#   docker run --gpus all -p 8000:8000 \
+#     -e HUGGING_FACE_HUB_TOKEN=<token> \
+#     ai-assistant-vllm --model meta-llama/Meta-Llama-3-8B-Instruct

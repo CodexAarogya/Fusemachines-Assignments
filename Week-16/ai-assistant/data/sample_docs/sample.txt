@@ -1,0 +1,56 @@
+AI Fellowship Program - Course Notes
+
+Module 1: Retrieval-Augmented Generation (RAG)
+RAG combines a retrieval system (typically a vector database) with a generative
+language model. Instead of relying solely on knowledge baked into the model's
+weights, the system first retrieves relevant chunks of text from a document
+store, then passes those chunks to the LLM as additional context. This reduces
+hallucination and lets the assistant answer questions about private or
+recently-updated documents it was never trained on.
+
+Module 2: Vector Databases
+A vector database stores numerical embeddings of text and supports fast
+nearest-neighbour search. Popular choices include Chroma, FAISS, Pinecone,
+Weaviate, and Milvus. Embeddings are produced by an embedding model (e.g.
+sentence-transformers or OpenAI's text-embedding-3-small) that maps semantically
+similar text to nearby points in vector space.
+
+Module 3: Function / Tool Calling
+Modern LLM APIs support "function calling", where the model can request that
+the calling application execute a named function with structured arguments,
+then feed the result back into the conversation. This lets an assistant look
+up live data (weather, stock prices), do precise arithmetic, or query a
+company's internal systems, rather than guessing.
+
+Module 4: Serving Open-Source Models with vLLM
+vLLM is a high-throughput inference server for open-weight LLMs such as
+Llama 3 and Mistral. It uses PagedAttention to manage the KV-cache efficiently,
+enabling much higher request throughput and lower latency than naive
+Hugging Face `transformers` serving, especially under concurrent load. vLLM
+exposes an OpenAI-compatible REST API, so existing OpenAI client code can
+point at a self-hosted vLLM server with only a base_url change.
+
+Module 5: Production Reliability Patterns
+Production LLM applications should implement: retries with exponential
+backoff for transient provider errors, rate limiting to protect both the
+service and the upstream provider's quota, a fallback chain across multiple
+providers/models so a single outage doesn't take down the whole assistant,
+and response caching to cut latency and cost for repeated queries.
+
+Module 6: Agentic Loops
+An agentic loop differs from a fixed pipeline because the model itself
+decides the next action based on intermediate results, rather than the
+application hard-coding a sequence of steps. A stopping condition (such as
+a maximum iteration count) is required so the loop cannot run indefinitely.
+Agentic systems commonly use tool calling to let the model search multiple
+sources, verify evidence before answering, or ask a clarifying question
+when information is missing.
+
+Module 7: Context Engineering
+As an agentic loop runs for multiple iterations, naively appending every
+raw tool result to the conversation history causes the prompt to grow
+without bound, eventually crowding out the original instructions — this is
+called context saturation. Techniques such as structured external notes
+(extracting a compact summary of each tool result instead of keeping the
+raw payload), capping or re-ranking retrieval results, and compaction help
+keep the prompt bounded across many iterations.
