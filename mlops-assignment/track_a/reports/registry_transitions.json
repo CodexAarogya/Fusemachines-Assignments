@@ -1,0 +1,12 @@
+[
+  {
+    "version": 1,
+    "to": "Staging",
+    "source_run": "logreg_C1.0"
+  },
+  {
+    "version": 1,
+    "to": "Production",
+    "source_run": "logreg_C1.0"
+  }
+]

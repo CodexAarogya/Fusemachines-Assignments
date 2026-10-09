@@ -1,0 +1,195 @@
+{
+  "perturbed_columns": [
+    "MonthlyCharges",
+    "Contract",
+    "Churn"
+  ],
+  "drifted_columns": [
+    "tenure",
+    "MonthlyCharges",
+    "TotalCharges",
+    "Contract"
+  ],
+  "drifted_share": 0.2,
+  "per_column": [
+    {
+      "column": "tenure",
+      "method": "Wasserstein distance (normed)",
+      "threshold": 0.1,
+      "score": 0.3276,
+      "drifted": true,
+      "injected": false
+    },
+    {
+      "column": "MonthlyCharges",
+      "method": "Wasserstein distance (normed)",
+      "threshold": 0.1,
+      "score": 0.6519,
+      "drifted": true,
+      "injected": true
+    },
+    {
+      "column": "TotalCharges",
+      "method": "Wasserstein distance (normed)",
+      "threshold": 0.1,
+      "score": 0.2206,
+      "drifted": true,
+      "injected": false
+    },
+    {
+      "column": "SeniorCitizen",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0242,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "gender",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0085,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "Partner",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0523,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "Dependents",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0575,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "PhoneService",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0326,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "MultipleLines",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0368,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "InternetService",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0341,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "OnlineSecurity",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0595,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "OnlineBackup",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0306,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "DeviceProtection",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.063,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "TechSupport",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0729,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "StreamingTV",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0414,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "StreamingMovies",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0263,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "Contract",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.18,
+      "drifted": true,
+      "injected": true
+    },
+    {
+      "column": "PaperlessBilling",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0239,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "PaymentMethod",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0696,
+      "drifted": false,
+      "injected": false
+    },
+    {
+      "column": "Churn",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0725,
+      "drifted": false,
+      "injected": true
+    }
+  ],
+  "target_drift": [
+    {
+      "column": "Churn",
+      "method": "Jensen-Shannon distance",
+      "threshold": 0.1,
+      "score": 0.0725,
+      "drifted": false,
+      "injected": true
+    }
+  ],
+  "custom_metrics": {
+    "MeanShift": 19.512,
+    "SegmentChurnShift": -0.0057
+  },
+  "injected_detected": {
+    "MonthlyCharges": true,
+    "Contract": true,
+    "Churn": false
+  }
+}

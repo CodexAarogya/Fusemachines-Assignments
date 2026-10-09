@@ -1,0 +1,14 @@
+[project]
+name = "churn-mlops"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "evidently>=0.7.23",
+    "fastapi>=0.143.0",
+    "matplotlib>=3.11.2",
+    "mlflow>=3.17.0",
+    "pandas>=3.0.6",
+    "scikit-learn>=1.9.1",
+    "tabulate>=0.10.0",
+    "uvicorn>=0.54.0",
+]

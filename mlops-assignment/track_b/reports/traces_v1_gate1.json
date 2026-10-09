@@ -1,0 +1,226 @@
+[
+ {
+  "case": "q1_vllm_confirm",
+  "stop_reason": "finished",
+  "iterations": 2,
+  "final": "vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+  "steps": [
+   {
+    "step": 1,
+    "tool": "rag_search",
+    "args": {
+     "query": "What technique does vLLM use to improve throughput, and is that confirmed by an external source?"
+    },
+    "result": "{\"results\": [{\"chunk_id\": \"sample-6-aaa111\", \"text\": \"vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.\", \"score\": 0.91, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-7-ccc333\", \"text\": \"Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.\", \"score\": 0.86, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-1-bbb222\", \"text\": \"RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.\", \"score\": 0.88, \"metadata\": {\"source\": \"sample.txt\"}}]}",
+    "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+    "reasoning": "Start with rag_search.",
+    "tokens": 172
+   },
+   {
+    "step": 2,
+    "tool": "finish",
+    "args": {},
+    "result": null,
+    "observation": "Accepted: sufficient independent sources and confidence.",
+    "reasoning": "I have a result; answering.",
+    "tokens": 229
+   }
+  ]
+ },
+ {
+  "case": "q2_calculator",
+  "stop_reason": "finished",
+  "iterations": 2,
+  "final": "3 * 40 = 120",
+  "steps": [
+   {
+    "step": 1,
+    "tool": "calculator",
+    "args": {
+     "expression": "3 * 40"
+    },
+    "result": "{\"expression\": \"3 * 40\", \"result\": 120}",
+    "observation": "3 * 40 = 120",
+    "reasoning": "Start with calculator.",
+    "tokens": 160
+   },
+   {
+    "step": 2,
+    "tool": "finish",
+    "args": {},
+    "result": null,
+    "observation": "Accepted: sufficient independent sources and confidence.",
+    "reasoning": "I have a result; answering.",
+    "tokens": 161
+   }
+  ]
+ },
+ {
+  "case": "q3_ambiguous",
+  "stop_reason": "finished",
+  "iterations": 2,
+  "final": "vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+  "steps": [
+   {
+    "step": 1,
+    "tool": "rag_search",
+    "args": {
+     "query": "Compare the two options and tell me which is better."
+    },
+    "result": "{\"results\": [{\"chunk_id\": \"sample-6-aaa111\", \"text\": \"vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.\", \"score\": 0.91, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-7-ccc333\", \"text\": \"Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.\", \"score\": 0.86, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-1-bbb222\", \"text\": \"RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.\", \"score\": 0.88, \"metadata\": {\"source\": \"sample.txt\"}}]}",
+    "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+    "reasoning": "Start with rag_search.",
+    "tokens": 150
+   },
+   {
+    "step": 2,
+    "tool": "finish",
+    "args": {},
+    "result": null,
+    "observation": "Accepted: sufficient independent sources and confidence.",
+    "reasoning": "I have a result; answering.",
+    "tokens": 218
+   }
+  ]
+ },
+ {
+  "case": "q4_wiki_down",
+  "stop_reason": "finished",
+  "iterations": 2,
+  "final": "RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.",
+  "steps": [
+   {
+    "step": 1,
+    "tool": "rag_search",
+    "args": {
+     "query": "What is Retrieval-Augmented Generation, confirmed by an external source?"
+    },
+    "result": "{\"results\": [{\"chunk_id\": \"sample-1-bbb222\", \"text\": \"RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.\", \"score\": 0.88, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-7-ccc333\", \"text\": \"Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.\", \"score\": 0.86, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-6-aaa111\", \"text\": \"vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.\", \"score\": 0.91, \"metadata\": {\"source\": \"sample.txt\"}}]}",
+    "observation": "(score=0.88) RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.",
+    "reasoning": "Start with rag_search.",
+    "tokens": 160
+   },
+   {
+    "step": 2,
+    "tool": "finish",
+    "args": {},
+    "result": null,
+    "observation": "Accepted: sufficient independent sources and confidence.",
+    "reasoning": "I have a result; answering.",
+    "tokens": 216
+   }
+  ]
+ },
+ {
+  "case": "q5_context_saturation",
+  "stop_reason": "finished",
+  "iterations": 2,
+  "final": "Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.",
+  "steps": [
+   {
+    "step": 1,
+    "tool": "rag_search",
+    "args": {
+     "query": "What does context saturation mean, confirmed by an external source if possible?"
+    },
+    "result": "{\"results\": [{\"chunk_id\": \"sample-7-ccc333\", \"text\": \"Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.\", \"score\": 0.86, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-1-bbb222\", \"text\": \"RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.\", \"score\": 0.88, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-6-aaa111\", \"text\": \"vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.\", \"score\": 0.91, \"metadata\": {\"source\": \"sample.txt\"}}]}",
+    "observation": "(score=0.86) Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.",
+    "reasoning": "Start with rag_search.",
+    "tokens": 164
+   },
+   {
+    "step": 2,
+    "tool": "finish",
+    "args": {},
+    "result": null,
+    "observation": "Accepted: sufficient independent sources and confidence.",
+    "reasoning": "I have a result; answering.",
+    "tokens": 216
+   }
+  ]
+ },
+ {
+  "case": "q6_weather",
+  "stop_reason": "finished",
+  "iterations": 2,
+  "final": "Paris: 18C, Partly cloudy",
+  "steps": [
+   {
+    "step": 1,
+    "tool": "get_weather",
+    "args": {
+     "city": "Paris"
+    },
+    "result": "{\"city\": \"Paris\", \"temperature_c\": \"18\", \"description\": \"Partly cloudy\"}",
+    "observation": "Paris: 18C, Partly cloudy",
+    "reasoning": "Start with get_weather.",
+    "tokens": 147
+   },
+   {
+    "step": 2,
+    "tool": "finish",
+    "args": {},
+    "result": null,
+    "observation": "Accepted: sufficient independent sources and confidence.",
+    "reasoning": "I have a result; answering.",
+    "tokens": 156
+   }
+  ]
+ },
+ {
+  "case": "q7_out_of_scope",
+  "stop_reason": "finished",
+  "iterations": 2,
+  "final": "vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+  "steps": [
+   {
+    "step": 1,
+    "tool": "rag_search",
+    "args": {
+     "query": "What is the airspeed velocity of an unladen swallow, confirmed by two sources?"
+    },
+    "result": "{\"results\": [{\"chunk_id\": \"sample-6-aaa111\", \"text\": \"vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.\", \"score\": 0.91, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-1-bbb222\", \"text\": \"RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.\", \"score\": 0.88, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-7-ccc333\", \"text\": \"Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.\", \"score\": 0.86, \"metadata\": {\"source\": \"sample.txt\"}}]}",
+    "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+    "reasoning": "Start with rag_search.",
+    "tokens": 162
+   },
+   {
+    "step": 2,
+    "tool": "finish",
+    "args": {},
+    "result": null,
+    "observation": "Accepted: sufficient independent sources and confidence.",
+    "reasoning": "I have a result; answering.",
+    "tokens": 225
+   }
+  ]
+ },
+ {
+  "case": "q8_rag_definition",
+  "stop_reason": "finished",
+  "iterations": 2,
+  "final": "vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+  "steps": [
+   {
+    "step": 1,
+    "tool": "rag_search",
+    "args": {
+     "query": "What does RAG stand for and what does it do? Confirm externally."
+    },
+    "result": "{\"results\": [{\"chunk_id\": \"sample-6-aaa111\", \"text\": \"vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.\", \"score\": 0.91, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-1-bbb222\", \"text\": \"RAG combines a retrieval system (a vector database) with a generative model, reducing hallucination by grounding answers in retrieved documents.\", \"score\": 0.88, \"metadata\": {\"source\": \"sample.txt\"}}, {\"chunk_id\": \"sample-7-ccc333\", \"text\": \"Naively appending every raw tool result to conversation history causes context saturation; structured external notes keep the prompt bounded.\", \"score\": 0.86, \"metadata\": {\"source\": \"sample.txt\"}}]}",
+    "observation": "(score=0.91) vLLM improves throughput using PagedAttention, which manages the KV-cache efficiently and enables much higher concurrent request throughput than naive serving.",
+    "reasoning": "Start with rag_search.",
+    "tokens": 156
+   },
+   {
+    "step": 2,
+    "tool": "finish",
+    "args": {},
+    "result": null,
+    "observation": "Accepted: sufficient independent sources and confidence.",
+    "reasoning": "I have a result; answering.",
+    "tokens": 221
+   }
+  ]
+ }
+]

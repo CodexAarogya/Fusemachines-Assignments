@@ -1,0 +1,6 @@
+run_id,tags.mlflow.runName,experiment_id,metrics.avg_latency_ms,metrics.total_tokens,metrics.correctness_pass_rate,metrics.avg_iterations,metrics.pct_tests_passed,metrics.task_completion_rate,metrics.evidently_tests_passed,metrics.disclosure_pass_rate,metrics.tool_call_correctness,params.confidence_threshold,params.prompt_chars,params.min_sources,params.chunk_size,params.temperature,params.retrieval_top_k,params.model,params.max_iterations,params.max_notes,params.prompt_version,tags.promotion
+f9c0c3a9ce3644038f6d63fbbc97aed9,prompt_v3_gate2,1,0.1325,7735.0,0.875,2.75,93.75,1.0,2.0,1.0,1.0,0.6,810,2,800,0.2,4,policy-sim (offline surrogate),6,8,v3,approved
+439fbf72d3e24596a4198e35f0434318,prompt_v1_gate2,1,0.13125,4819.0,0.25,3.0,31.25,0.0,0.0,0.375,1.0,0.6,276,2,800,0.2,4,policy-sim (offline surrogate),6,8,v1,BLOCKED (regression)
+218e864a491d4d458fa8d54c8dc5f6bb,prompt_v3_gate1,1,0.17875,7735.0,0.875,2.75,93.75,1.0,2.0,1.0,1.0,0.6,810,1,800,0.2,4,policy-sim (offline surrogate),6,8,v3,approved
+5152ace68dfc4cbeb2c4c3ede025fa08,prompt_v2_gate1,1,0.14625,5960.0,0.5,3.0,62.5,0.625,0.0,0.75,1.0,0.6,430,1,800,0.2,4,policy-sim (offline surrogate),6,8,v2,BLOCKED (regression)
+aa45e6c971844093bc8963796a67bb71,prompt_v1_gate1,1,0.175,2913.0,0.25,2.0,31.25,0.625,0.0,0.375,1.0,0.6,276,1,800,0.2,4,policy-sim (offline surrogate),6,8,v1,BLOCKED (regression)
